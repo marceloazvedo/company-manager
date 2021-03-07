@@ -14,6 +14,8 @@ data class RoleGroup (
         var description: String,
         @Enumerated(EnumType.STRING)
         val userType: UserType,
+        @Transient
+        var permittedResources: List<ApplicationModule>,
         @CreatedDate var createAt: LocalDateTime = LocalDateTime.now(),
         @LastModifiedDate var updateAt: LocalDateTime? = null,
 )
