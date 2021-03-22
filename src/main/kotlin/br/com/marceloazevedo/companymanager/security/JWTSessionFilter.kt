@@ -22,8 +22,7 @@ class JWTSessionFilter : AbstractAuthenticationProcessingFilter {
     }
 
     override fun attemptAuthentication(request: HttpServletRequest?, response: HttpServletResponse?): Authentication {
-        val sessionUser = ObjectMapper()
-                .readValue(request!!.inputStream, CreateSessionDTO::class.java)
+        val sessionUser = ObjectMapper().readValue(request!!.inputStream, CreateSessionDTO::class.java)
         return authenticationManager
                 .authenticate(
                         UsernamePasswordAuthenticationToken(

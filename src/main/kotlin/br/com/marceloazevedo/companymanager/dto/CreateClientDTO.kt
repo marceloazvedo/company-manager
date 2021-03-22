@@ -1,11 +1,18 @@
 package br.com.marceloazevedo.companymanager.dto
 
-import javax.validation.constraints.NotBlank
-import javax.xml.bind.annotation.XmlRootElement
+import javax.validation.constraints.Email
+import javax.validation.constraints.NotEmpty
+import javax.validation.constraints.NotNull
 
-@XmlRootElement
 data class CreateClientDTO(
-        @NotBlank val email: String,
-        @NotBlank val name: String,
-        @NotBlank val password: String
+        @field:NotEmpty
+        @field:NotNull
+        @field:Email(message = "{email.invalid}")
+        val email: String,
+        @field:NotEmpty
+        @field:NotNull
+        val name: String,
+        @field:NotEmpty
+        @field:NotNull
+        val password: String
 )

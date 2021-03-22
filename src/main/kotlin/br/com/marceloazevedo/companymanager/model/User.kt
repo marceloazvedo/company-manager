@@ -17,7 +17,7 @@ data class User(
         @Enumerated(EnumType.STRING)
         val userType: UserType,
         @ManyToOne
-        val roleGroup: RoleGroup,
+        val roleGroup: RoleGroup?,
         var status: Boolean = true,
         @CreatedDate var createAt: LocalDateTime = LocalDateTime.now(),
         @LastModifiedDate var updateAt: LocalDateTime? = null,

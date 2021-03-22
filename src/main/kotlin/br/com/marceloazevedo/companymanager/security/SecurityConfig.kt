@@ -1,8 +1,12 @@
 package br.com.marceloazevedo.companymanager.security
 
+import com.fasterxml.jackson.annotation.JsonInclude
+import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.annotation.Order
 import org.springframework.http.HttpMethod
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -23,7 +27,7 @@ class SecurityConfig(private val userDetailsService: UserDetailsService) : WebSe
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .authorizeRequests()
-                    .antMatchers(HttpMethod.POST, "/client")
+                    .antMatchers(HttpMethod.POST, "/clients")
                     .permitAll() // resource to register a user client
                 .and()
                     .authorizeRequests()
