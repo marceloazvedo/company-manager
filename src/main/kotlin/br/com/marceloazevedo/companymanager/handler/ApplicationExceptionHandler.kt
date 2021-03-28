@@ -1,10 +1,11 @@
 package br.com.marceloazevedo.companymanager.handler
 
-import br.com.marceloazevedo.companymanager.dto.response.FieldError
 import br.com.marceloazevedo.companymanager.dto.response.ErrorResponse
+import br.com.marceloazevedo.companymanager.dto.response.FieldError
+import br.com.marceloazevedo.companymanager.extension.toFieldError
 import com.fasterxml.jackson.databind.exc.InvalidDefinitionException
-import com.fasterxml.jackson.databind.exc.MismatchedInputException
 import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
+import org.hibernate.exception.ConstraintViolationException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.MessageSource
 import org.springframework.http.HttpHeaders
@@ -68,13 +69,22 @@ class ApplicationExceptionHandler : ResponseEntityExceptionHandler() {
     }
 
     @ExceptionHandler(value = [InvalidDefinitionException::class])
-    fun handleMismatchedInputException(exception: InvalidDefinitionException, headers: HttpHeaders, request: WebRequest): ResponseEntity<ErrorResponse> {
-        println("handleMismatchedInputException")
+    fun handleMismatchedInputException(request: WebRequest, exception: InvalidDefinitionException): ResponseEntity<ErrorResponse> {
         exception.printStackTrace()
         return ResponseEntity(ErrorResponse(
                 status = HttpStatus.BAD_REQUEST.value(),
                 errors = null, path = (request as ServletWebRequest).request.requestURI ?: "not found",
                 error = messageSource.getMessage("object.fields.notNull", null, Locale.ENGLISH)),
+                HttpStatus.BAD_REQUEST)
+    }
+
+    @ExceptionHandler(value = [ConstraintViolationException::class])
+    fun handleConstraintViolationException(request: WebRequest, exception: ConstraintViolationException): ResponseEntity<ErrorResponse> {
+        return ResponseEntity(ErrorResponse(
+                status = HttpStatus.BAD_REQUEST.value(),
+                errors = listOf(exception.toFieldError(messageSource)), path = (request as ServletWebRequest).request.requestURI
+                ?: "not found",
+                error = messageSource.getMessage("object.fields.constraintValidationError", null, Locale.ENGLISH)),
                 HttpStatus.BAD_REQUEST)
     }
 

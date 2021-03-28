@@ -8,7 +8,7 @@ import javax.persistence.*
 
 @Entity
 data class RoleGroup (
-        @Id @GeneratedValue
+        @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
         val id: Long? = null,
         var name: String,
         var description: String,

@@ -18,4 +18,6 @@ class UserServiceImpl : UserService {
     override fun findAll(): List<User> = userRepository.findAll()
 
     override fun findByEmail(email: String): User = userRepository.findOneByEmail(email)
+
+    override fun existsByEmail(email: String): Boolean = userRepository.existsByEmail(email)
 }

@@ -8,7 +8,7 @@ import javax.persistence.*
 
 @Entity
 data class User(
-        @Id @GeneratedValue
+        @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
         val id: Long? = null,
         val name: String,
         @Column(unique = true, nullable = false)
@@ -21,6 +21,4 @@ data class User(
         var status: Boolean = true,
         @CreatedDate var createAt: LocalDateTime = LocalDateTime.now(),
         @LastModifiedDate var updateAt: LocalDateTime? = null,
-) {
-
-}
+)
