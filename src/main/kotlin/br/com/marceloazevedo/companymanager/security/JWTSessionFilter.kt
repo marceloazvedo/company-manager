@@ -1,9 +1,12 @@
 package br.com.marceloazevedo.companymanager.security
 
 import br.com.marceloazevedo.companymanager.dto.CreateSessionDTO
+import br.com.marceloazevedo.companymanager.dto.response.ResourceResponse
+import br.com.marceloazevedo.companymanager.enum.ResponseCode
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.springframework.http.MediaType
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
@@ -40,6 +43,8 @@ class JWTSessionFilter : AbstractAuthenticationProcessingFilter {
                 .withExpiresAt(Date(System.currentTimeMillis() + SecurityConstant.EXPIRATION_TIME))
                 .sign(Algorithm.HMAC512(SecurityConstant.SECRET))
         response!!.addHeader(SecurityConstant.HEADER_STRING, SecurityConstant.TOKEN_PREFIX + token)
+        response.addHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+        response.writer.append(ObjectMapper().writeValueAsString(ResourceResponse(ResponseCode.SUCCESS)))
     }
 
 }

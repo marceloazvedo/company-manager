@@ -49,4 +49,8 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+
+	dependencies {
+		testImplementation("com.h2database:h2:1.4.200")
+	}
 }

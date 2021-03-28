@@ -16,6 +16,6 @@ data class RoleGroup (
         val userType: UserType,
         @Transient
         var permittedResources: List<ApplicationModule>,
-        @CreatedDate var createAt: LocalDateTime = LocalDateTime.now(),
-        @LastModifiedDate var updateAt: LocalDateTime? = null,
+        @CreatedDate var createdAt: LocalDateTime = LocalDateTime.now(),
+        @LastModifiedDate var updatedAt: LocalDateTime? = null,
 )

@@ -1,7 +1,8 @@
 package br.com.marceloazevedo.companymanager.controller
 
 import br.com.marceloazevedo.companymanager.dto.CreateClientDTO
-import br.com.marceloazevedo.companymanager.model.User
+import br.com.marceloazevedo.companymanager.dto.response.ClientCreatedResponse
+import br.com.marceloazevedo.companymanager.mapper.ClientMapper
 import br.com.marceloazevedo.companymanager.service.ClientService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -20,9 +21,11 @@ class ClientController {
 
     @Autowired
     private lateinit var clientService: ClientService
+    @Autowired
+    private lateinit var clientMapper: ClientMapper
 
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun create(@Valid @RequestBody clientDTO: CreateClientDTO): ResponseEntity<User> =
-            ResponseEntity(clientService.create(clientDTO), HttpStatus.CREATED)
+    fun create(@Valid @RequestBody clientDTO: CreateClientDTO): ResponseEntity<ClientCreatedResponse> =
+            ResponseEntity(clientMapper.toSuccessCreatedResponse(clientService.create(clientDTO)), HttpStatus.CREATED)
 
 }

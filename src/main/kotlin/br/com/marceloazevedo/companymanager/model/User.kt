@@ -10,15 +10,15 @@ import javax.persistence.*
 data class User(
         @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
         val id: Long? = null,
-        val name: String,
+        var name: String,
         @Column(unique = true, nullable = false)
-        val email: String,
-        val password: String,
+        var email: String,
+        var password: String,
         @Enumerated(EnumType.STRING)
-        val userType: UserType,
+        var userType: UserType,
         @ManyToOne
-        val roleGroup: RoleGroup?,
+        var roleGroup: RoleGroup?,
         var status: Boolean = true,
-        @CreatedDate var createAt: LocalDateTime = LocalDateTime.now(),
-        @LastModifiedDate var updateAt: LocalDateTime? = null,
+        @CreatedDate val createdAt: LocalDateTime = LocalDateTime.now(),
+        @LastModifiedDate var updatedAt: LocalDateTime? = null,
 )
