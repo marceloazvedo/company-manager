@@ -52,25 +52,24 @@ class ApplicationExceptionHandler : ResponseEntityExceptionHandler() {
     }
 
     override fun handleHttpMessageNotReadable(ex: HttpMessageNotReadableException, headers: HttpHeaders, status: HttpStatus, request: WebRequest): ResponseEntity<Any> {
-        if (ex.cause is MissingKotlinParameterException) return handleMissingKotlinParameter(ex.cause as MissingKotlinParameterException, (request as ServletWebRequest).request.requestURI) as ResponseEntity<Any>
+        if (ex.cause is MissingKotlinParameterException) return handleMissingKotlinParameter(request, ex.cause as MissingKotlinParameterException) as ResponseEntity<Any>
         return super.handleHttpMessageNotReadable(ex, headers, status, request)
     }
 
     @ExceptionHandler(value = [MissingKotlinParameterException::class])
-    fun handleMissingKotlinParameter(exception: MissingKotlinParameterException, uri: String? = null): ResponseEntity<ErrorResponse> {
+    fun handleMissingKotlinParameter(request: WebRequest, exception: MissingKotlinParameterException): ResponseEntity<ErrorResponse> {
         val fieldsError = exception.path.map { reference ->
             FieldError(reference.fieldName, messageSource.getMessage("field.notNull", null, Locale.ENGLISH), null)
         }
         return ResponseEntity(ErrorResponse(
                 status = HttpStatus.BAD_REQUEST.value(),
-                errors = fieldsError, path = uri ?: "not found",
+                errors = fieldsError, path = (request as ServletWebRequest).request.requestURI ?: "not found",
                 error = messageSource.getMessage("object.fields.notNull", null, Locale.ENGLISH)),
                 HttpStatus.BAD_REQUEST)
     }
 
     @ExceptionHandler(value = [InvalidDefinitionException::class])
     fun handleMismatchedInputException(request: WebRequest, exception: InvalidDefinitionException): ResponseEntity<ErrorResponse> {
-        exception.printStackTrace()
         return ResponseEntity(ErrorResponse(
                 status = HttpStatus.BAD_REQUEST.value(),
                 errors = null, path = (request as ServletWebRequest).request.requestURI ?: "not found",
